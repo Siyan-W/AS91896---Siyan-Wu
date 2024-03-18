@@ -1,5 +1,6 @@
 import easygui
 
+# Task Dictionary containing details of tasks
 Task_Dictionary = {
     'T1': {
         'Title': 'Design Homepage',
@@ -62,6 +63,7 @@ Team_Member_Dictionary = {
     }
 }
 
+# Function to display task details
 def print_task(task_id):
     task_details = Task_Dictionary.get(task_id)
     if task_details:
@@ -72,8 +74,9 @@ def print_task(task_id):
                   f'Priority: {task_details["Priority"]}\n' \
                   f'Status: {task_details["Status"]}'
         easygui.msgbox(message, title='Task Details')
-
+# Get user input for Task ID
 task_id = easygui.enterbox('Enter Task ID (eg., T1, T2, ...):')
+# Check if the entered Task ID is valid and display task details
 if task_id in Task_Dictionary:
     print_task(task_id)
 else:
