@@ -61,3 +61,20 @@ Team_Member_Dictionary = {
         'Tasks Assigned': 'T5'
     }
 }
+
+def print_task(task_id):
+    task_details = Task_Dictionary.get(task_id)
+    if task_details:
+        message = f'Task ID: {task_id}\n' \
+                  f'Title: {task_details["Title"]}\n' \
+                  f'Description: {task_details["Description"]}\n' \
+                  f'Assignee: {task_details["Assignee"]}\n' \
+                  f'Priority: {task_details["Priority"]}\n' \
+                  f'Status: {task_details["Status"]}'
+        easygui.msgbox(message, title='Task Details')
+
+task_id = easygui.enterbox('Enter Task ID (eg., T1, T2, ...):')
+if task_id in Task_Dictionary:
+    print_task(task_id)
+else:
+    easygui.msgbox('Invalid Task ID entered.', title='Error')
