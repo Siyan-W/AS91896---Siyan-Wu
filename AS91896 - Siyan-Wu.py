@@ -83,3 +83,34 @@ if task_id in Task_Dictionary:
     print_task(task_id)
 else:
     easygui.msgbox('Invalid Task ID entered.', title='Error')
+
+def add_new_task():
+    # Find the next available task ID by incrementing the last task ID
+    last_task_id = sorted(Task_Dictionary.keys())[-1]
+    new_task_id = 'T' + str(int(last_task_id[1:]) + 1)
+
+    # Get user input for task details
+    title = easygui.enterbox('Enter the title of the task:')
+    description = easygui.enterbox('Enter the description of the task:')
+    priority = easygui.integerbox('Enter priority rating (1-3) of the task:',\
+                                   lowerbound=1, upperbound=3)
+    status = easygui.choicebox('Select the status of the task:',\
+                            choices=['Not Started', 'In Progress', 'Blocked'])
+
+    # Add the new task to the Task Dictionary
+    Task_Dictionary[new_task_id] = {
+        'Title': title,
+        'Description': description,
+        'Assignee': None,  # Initially no assignee
+        'Priority': priority,
+        'Status': status
+    }
+
+    easygui.msgbox('New task added successfully!\nTask ID: {}'.format(new_task_id), title='Task Added')
+
+# Main function to run the program
+def main():
+    add_new_task()
+
+if __name__ == "__main__":
+    main()
