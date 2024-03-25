@@ -106,7 +106,7 @@ def add_new_task():
         'Status': status
     }
 
-    easygui.msgbox(f'New task added successfully!\nTask ID: {new_task_id}', title='Task Added')
+    easygui.msgbox(f'New task added successfully!\nTask ID: '(new_task_id)', title='Task Added')
 
 # Main function to run the program
 def main():
