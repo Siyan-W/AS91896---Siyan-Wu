@@ -84,30 +84,29 @@ if task_id in Task_Dictionary:
 else:
     easygui.msgbox('Invalid Task ID entered.', title='Error')
 
-def add_new_task():
-    # Find the next available task ID by incrementing the last task ID
-    last_task_id = sorted(Task_Dictionary.keys())[-1]
-    new_task_id = 'T' + str(int(last_task_id[1:]) + 1)
+def add_task():
+    # Generate sequential task ID
+    new_task_id = 'T' + str(len(Task_Dictionary) + 1)
 
-    # Get user input for task details
-    title = easygui.enterbox('Enter the title of the task:')
-    description = easygui.enterbox('Enter the description of the task:')
-    priority = easygui.integerbox('Enter priority rating (1-3) of the task:',\
-                                   lowerbound=1, upperbound=3)
-    status = easygui.choicebox('Select the status of the task:',\
-                            choices=['Not Started', 'In Progress', 'Blocked'])
+    # Input task details
+    title = easygui.enterbox(msg="Enter task title:")
+    description = easygui.enterbox(msg="Enter task description:")
+    priority = easygui.enterbox(msg="Enter task priority (1-3):")
+    assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary.keys()))
+    status = easygui.choicebox(msg="Set task status:", choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
 
-    # Add the new task to the Task Dictionary
+    # Add task to dictionaries
     Task_Dictionary[new_task_id] = {
         'Title': title,
         'Description': description,
-        'Assignee': None,  # Initially no assignee
-        'Priority': priority,
+        'Assignee': assignee,
+        'Priority': int(priority),
         'Status': status
     }
 
-    easygui.msgbox('New task added successfully!\nTask ID: {}'.format(new_task_id), title='Task Added')
-
+    # Update team member's task list
+    Team_Member_Dictionary[assignee]['Tasks Assigned'].append(new_task_id)
+    
 # Main function to run the program
 def main():
     add_new_task()
