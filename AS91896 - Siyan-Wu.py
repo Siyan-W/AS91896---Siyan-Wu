@@ -63,27 +63,6 @@ Team_Member_Dictionary = {
     }
 }
 
-# Function to display task details
-def print_task(task_id):
-    task_details = Task_Dictionary.get(task_id)
-    if task_details:
-        message = f'Task ID: {task_id}\n' \
-                  f'Title: {task_details["Title"]}\n' \
-                  f'Description: {task_details["Description"]}\n' \
-                  f'Assignee: {task_details["Assignee"]}\n' \
-                  f'Priority: {task_details["Priority"]}\n' \
-                  f'Status: {task_details["Status"]}'
-        easygui.msgbox(message, title='Task Details')
-
-# Get user input for Task ID
-task_id = easygui.enterbox('Enter Task ID (eg., T1, T2, T3, ...):')
-
-# Check if the entered Task ID is valid and display task details
-if task_id in Task_Dictionary:
-    print_task(task_id)
-else:
-    easygui.msgbox('Invalid Task ID entered.', title='Error')
-
 def add_task():
     # Generate sequential task ID
     new_task_id = 'T' + str(len(Task_Dictionary) + 1)
@@ -106,10 +85,24 @@ def add_task():
 
     # Update team member's task list
     Team_Member_Dictionary[assignee]['Tasks Assigned'].append(new_task_id)
-    
-# Main function to run the program
-def main():
-    add_new_task()
 
-if __name__ == "__main__":
-    main()
+def update_task():
+    task_id = easygui.enterbox(msg="Enter task ID to update:")
+
+    if task_id in Task_Dictionary:
+        # Update task status
+        status = easygui.choicebox(msg="Set task status:", choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
+        Task_Dictionary[task_id]['Status'] = status
+
+        # Assign task to a team member
+        assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary.keys()))
+        Task_Dictionary[task_id]['Assignee'] = assignee
+
+        # Update team member's task list
+        Team_Member_Dictionary[assignee]['Tasks Assigned'].append(task_id)
+
+        # Remove task from team member's task list if completed
+        if status == 'Completed':
+            Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].remove(task_id)
+    else:
+        easygui.msgbox("Task ID not found!", title="Error")
