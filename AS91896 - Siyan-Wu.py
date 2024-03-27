@@ -71,9 +71,12 @@ def add_task():
     # Input task details
     title = easygui.enterbox(msg="Enter task title:")
     description = easygui.enterbox(msg="Enter task description:")
-    priority = easygui.integerbox(msg="Enter task priority (1-3):",lowerbound= 1, upperbound = 3)
-    assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary))
-    status = easygui.choicebox(msg="Set task status:", choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
+    priority = easygui.integerbox(msg="Enter task priority (1-3):", \
+        lowerbound= 1, upperbound = 3)
+    assignee = easygui.choicebox(msg="Assign task to:", \
+        choices=list(Team_Member_Dictionary))
+    status = easygui.choicebox(msg="Set task status:", \
+        choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
 
     # Add task to dictionaries
     Task_Dictionary[new_task_id] = {
@@ -89,32 +92,37 @@ def update_task():
 
     if task_id in Task_Dictionary:
         # Update task status
-        status = easygui.choicebox(msg="Set task status:", choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
+        status = easygui.choicebox(msg="Set task status:", \
+                choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
         Task_Dictionary[task_id]['Status'] = status
 
         # Assign task to a new team member
-        assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary))
+        assignee = easygui.choicebox(msg="Assign task to:", \
+                choices=list(Team_Member_Dictionary))
         Task_Dictionary[task_id]['Assignee'] = assignee
 
         # Remove task from team member's task list if completed
         # Convert the string to a list
-        tasks_assigned = Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
+        tasks_assigned = Team_Member_Dictionary\
+            [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
 
         # Remove the task_id from the list
-        tasks_assigned = [task.strip() for task in tasks_assigned if task.strip() != task_id]
+        tasks_assigned = \
+        [task.strip() for task in tasks_assigned if task.strip() != task_id]
 
         # Convert the list back to a string
-        Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'] = ', '.join(tasks_assigned)
+        Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]\
+            ['Tasks Assigned'] = ', '.join(tasks_assigned)
         
     else:
         easygui.msgbox("Task ID not found!", title="Error")
 
 def search_task():
-    task_title = easygui.choicebox(msg="Choose a task to view:", choices=list(Task_Dictionary))
+    task_title = easygui.choicebox(msg="Choose a task to view:", \
+            choices=list(Task_Dictionary))
     if task_title:
         task_details = Task_Dictionary[task_title]
-        easygui.msgbox(msg=f"Title: {task_details['Title']}\nDescription: {task_details['Description']}\nAssignee: {task_details['Assignee']}\nPriority: {task_details['Priority']}\nStatus: {task_details['Status']}",
-                       title="Task Details")
+        easygui.msgbox(msg=f"Title: {task_details['Title']}\nDescription: {task_details['Description']}\nAssignee: {task_details['Assignee']}\nPriority: {task_details['Priority']}\nStatus: {task_details['Status']}", title="Task Details")
     else:
         easygui.msgbox("No task selected!", title="Error")
 
