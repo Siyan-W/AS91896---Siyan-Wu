@@ -70,7 +70,7 @@ def add_task():
     # Input task details
     title = easygui.enterbox(msg="Enter task title:")
     description = easygui.enterbox(msg="Enter task description:")
-    priority = easygui.enterbox(msg="Enter task priority (1-3):")
+    priority = easygui.integerbox(msg="Enter task priority (1-3):",lowerbound= 1, upperbound = 3)
     assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary.keys()))
     status = easygui.choicebox(msg="Set task status:", choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
 
