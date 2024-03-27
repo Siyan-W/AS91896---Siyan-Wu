@@ -43,6 +43,7 @@ Task_Dictionary = {
     }
 }
 
+# Team Member Dictionary containing details of members
 Team_Member_Dictionary = {
     'JSM': {
         'Name': "John Smith",
@@ -71,7 +72,7 @@ def add_task():
     title = easygui.enterbox(msg="Enter task title:")
     description = easygui.enterbox(msg="Enter task description:")
     priority = easygui.integerbox(msg="Enter task priority (1-3):",lowerbound= 1, upperbound = 3)
-    assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary.keys()))
+    assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary))
     status = easygui.choicebox(msg="Set task status:", choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
 
     # Add task to dictionaries
@@ -83,9 +84,6 @@ def add_task():
         'Status': status
     }
 
-    # Update team member's task list
-    Team_Member_Dictionary[assignee]['Tasks Assigned'].append(new_task_id)
-
 def update_task():
     task_id = easygui.enterbox(msg="Enter task ID to update:")
 
@@ -94,21 +92,25 @@ def update_task():
         status = easygui.choicebox(msg="Set task status:", choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
         Task_Dictionary[task_id]['Status'] = status
 
-        # Assign task to a team member
-        assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary.keys()))
+        # Assign task to a new team member
+        assignee = easygui.choicebox(msg="Assign task to:", choices=list(Team_Member_Dictionary))
         Task_Dictionary[task_id]['Assignee'] = assignee
 
-        # Update team member's task list
-        Team_Member_Dictionary[assignee]['Tasks Assigned'].append(task_id)
-
         # Remove task from team member's task list if completed
-        if status == 'Completed':
-            Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].remove(task_id)
+        # Convert the string to a list
+        tasks_assigned = Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
+
+        # Remove the task_id from the list
+        tasks_assigned = [task.strip() for task in tasks_assigned if task.strip() != task_id]
+
+        # Convert the list back to a string
+        Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'] = ', '.join(tasks_assigned)
+        
     else:
         easygui.msgbox("Task ID not found!", title="Error")
 
 def search_task():
-    task_title = easygui.choicebox(msg="Choose a task to view:", choices=list(Task_Dictionary.keys()))
+    task_title = easygui.choicebox(msg="Choose a task to view:", choices=list(Task_Dictionary))
     if task_title:
         task_details = Task_Dictionary[task_title]
         easygui.msgbox(msg=f"Title: {task_details['Title']}\nDescription: {task_details['Description']}\nAssignee: {task_details['Assignee']}\nPriority: {task_details['Priority']}\nStatus: {task_details['Status']}",
@@ -117,10 +119,10 @@ def search_task():
         easygui.msgbox("No task selected!", title="Error")
 
 def search_team_member():
-    team_member = easygui.choicebox(msg="Choose a team member to view:", choices=list(Team_Member_Dictionary.keys()))
+    team_member = easygui.choicebox(msg="Choose a team member to view:", choices=list(Team_Member_Dictionary))
     if team_member:
         member_details = Team_Member_Dictionary[team_member]
-        task_list = ", ".join(member_details['Tasks Assigned'])
+        task_list = (member_details['Tasks Assigned'])
         easygui.msgbox(msg=f"Name: {member_details['Name']}\nEmail: {member_details['Email']}\nTasks Assigned: {task_list}",
                        title="Team Member Details")
     else:
@@ -145,7 +147,7 @@ def print_all():
     task_collection = ""
     for task_id, task_details in Task_Dictionary.items():
         task_collection += f"Task ID: {task_id}\nTitle: {task_details['Title']}\nDescription: {task_details['Description']}\nAssignee: {task_details['Assignee']}\nPriority: {task_details['Priority']}\nStatus: {task_details['Status']}\n\n"
-    easygui.codebox(msg="Task Collection", text=task_collection, title="Task Collection")
+    easygui.msgbox(task_collection, title="Task Collection")
 
 # Main menu options
 options = [
