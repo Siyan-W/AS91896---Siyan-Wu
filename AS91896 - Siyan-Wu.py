@@ -106,3 +106,72 @@ def update_task():
             Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].remove(task_id)
     else:
         easygui.msgbox("Task ID not found!", title="Error")
+
+def search_task():
+    task_title = easygui.choicebox(msg="Choose a task to view:", choices=list(Task_Dictionary.keys()))
+    if task_title:
+        task_details = Task_Dictionary[task_title]
+        easygui.msgbox(msg=f"Title: {task_details['Title']}\nDescription: {task_details['Description']}\nAssignee: {task_details['Assignee']}\nPriority: {task_details['Priority']}\nStatus: {task_details['Status']}",
+                       title="Task Details")
+    else:
+        easygui.msgbox("No task selected!", title="Error")
+
+def search_team_member():
+    team_member = easygui.choicebox(msg="Choose a team member to view:", choices=list(Team_Member_Dictionary.keys()))
+    if team_member:
+        member_details = Team_Member_Dictionary[team_member]
+        task_list = ", ".join(member_details['Tasks Assigned'])
+        easygui.msgbox(msg=f"Name: {member_details['Name']}\nEmail: {member_details['Email']}\nTasks Assigned: {task_list}",
+                       title="Team Member Details")
+    else:
+        easygui.msgbox("No team member selected!", title="Error")
+
+def generate_report():
+    completed_tasks = in_progress_tasks = blocked_tasks = not_started_tasks = 0
+    for task in Task_Dictionary.values():
+        if task['Status'] == 'Completed':
+            completed_tasks += 1
+        elif task['Status'] == 'In progress':
+            in_progress_tasks += 1
+        elif task['Status'] == 'Blocked':
+            blocked_tasks += 1
+        elif task['Status'] == 'Not Started':
+            not_started_tasks += 1
+
+    report_msg = f"Tasks Completed: {completed_tasks}\nTasks In Progress: {in_progress_tasks}\nTasks Blocked: {blocked_tasks}\nTasks Not Started: {not_started_tasks}"
+    easygui.msgbox(msg=report_msg, title="Project Progress Report")
+
+def print_all():
+    task_collection = ""
+    for task_id, task_details in Task_Dictionary.items():
+        task_collection += f"Task ID: {task_id}\nTitle: {task_details['Title']}\nDescription: {task_details['Description']}\nAssignee: {task_details['Assignee']}\nPriority: {task_details['Priority']}\nStatus: {task_details['Status']}\n\n"
+    easygui.codebox(msg="Task Collection", text=task_collection, title="Task Collection")
+
+# Main menu options
+options = [
+    "Add Task",
+    "Update Task",
+    "Search Task",
+    "Search Member",
+    "Generate Report",
+    "Print All",
+    "Exit"
+]
+
+while True:
+    choice = easygui.buttonbox(msg="Choose an option:", choices=options)
+
+    if choice == "Add Task":
+        add_task()
+    elif choice == "Update Task":
+        update_task()
+    elif choice == "Search Task":
+        search_task()
+    elif choice == "Search Member":
+        search_team_member()
+    elif choice == "Generate Report":
+        generate_report()
+    elif choice == "Print All":
+        print_all()
+    elif choice == "Exit":
+        break
