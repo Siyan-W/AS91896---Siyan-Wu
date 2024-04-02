@@ -65,27 +65,41 @@ Team_Member_Dictionary = {
 }
 
 def add_task():
-    # Generate sequential task ID
-    new_task_id = 'T' + str(len(Task_Dictionary) + 1)
+    while True:
+        # Generate sequential task ID
+        new_task_id = 'T' + str(len(Task_Dictionary) + 1)
 
-    # Input task details
-    title = easygui.enterbox(msg="Enter task title:")
-    description = easygui.enterbox(msg="Enter task description:")
-    priority = easygui.integerbox(msg="Enter task priority (1-3):", \
+        # Input task details
+        title = easygui.enterbox(msg="Enter task title:")
+        if title == None:
+            break
+
+        description = easygui.enterbox(msg="Enter task description:")
+        if description == None:
+            break
+        
+        priority = easygui.integerbox(msg="Enter task priority (1-3):", \
         lowerbound= 1, upperbound = 3)
-    assignee = easygui.choicebox(msg="Assign task to:", \
-        choices=list(Team_Member_Dictionary))
-    status = easygui.choicebox(msg="Set task status:", \
-        choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
+        if priority == None:
+            break
 
-    # Add task to dictionaries
-    Task_Dictionary[new_task_id] = {
-        'Title': title,
-        'Description': description,
-        'Assignee': assignee,
-        'Priority': int(priority),
-        'Status': status
-    }
+        status = easygui.choicebox(msg="Set task status:", \
+        choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
+        if status == None:
+            break
+
+        # Add task to dictionaries
+        Task_Dictionary[new_task_id] = {
+            'Title': title,
+            'Description': description,
+            "Assignee": None,
+            'Priority': int(priority),
+            'Status': status
+        }
+
+        easygui.msgbox(f"Task {new_task_id} has been added")
+
+        break
 
 def update_task():
     while True:
@@ -97,7 +111,7 @@ def update_task():
         if task_id in Task_Dictionary:
             # Update task status
             status = easygui.choicebox(msg="Set task status:", \
-                    choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
+                choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
             
             Task_Dictionary[task_id]['Status'] = status
 
@@ -109,11 +123,11 @@ def update_task():
             # Remove task from team member's task list if completed
             # Convert the string to a list
             tasks_assigned = Team_Member_Dictionary\
-                [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
+            [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
 
             # Remove the task_id from the list
             tasks_assigned = \
-            [task.strip() for task in tasks_assigned if task.strip() != task_id]
+            [task.strip() for task in tasks_assigned if task.strip() !=task_id]
 
             # Convert the list back to a string
             Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]\
