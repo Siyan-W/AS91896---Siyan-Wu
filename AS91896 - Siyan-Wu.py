@@ -88,51 +88,72 @@ def add_task():
     }
 
 def update_task():
-    task_id = easygui.enterbox(msg="Enter task ID to update:")
+    while True:
+        task_id = easygui.enterbox(msg="Enter task ID to update:")
 
-    if task_id in Task_Dictionary:
-        # Update task status
-        status = easygui.choicebox(msg="Set task status:", \
-                choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
-        Task_Dictionary[task_id]['Status'] = status
+        if task_id == None:
+            break
 
-        # Assign task to a new team member
-        assignee = easygui.choicebox(msg="Assign task to:", \
-                choices=list(Team_Member_Dictionary))
-        Task_Dictionary[task_id]['Assignee'] = assignee
+        if task_id in Task_Dictionary:
+            # Update task status
+            status = easygui.choicebox(msg="Set task status:", \
+                    choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
+            
+            Task_Dictionary[task_id]['Status'] = status
 
-        # Remove task from team member's task list if completed
-        # Convert the string to a list
-        tasks_assigned = Team_Member_Dictionary\
-            [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
+            # Assign task to a new team member
+            assignee = easygui.choicebox(msg="Assign task to:", \
+                    choices=list(Team_Member_Dictionary))
+            Task_Dictionary[task_id]['Assignee'] = assignee
 
-        # Remove the task_id from the list
-        tasks_assigned = \
-        [task.strip() for task in tasks_assigned if task.strip() != task_id]
+            # Remove task from team member's task list if completed
+            # Convert the string to a list
+            tasks_assigned = Team_Member_Dictionary\
+                [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
 
-        # Convert the list back to a string
-        Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]\
-            ['Tasks Assigned'] = ', '.join(tasks_assigned)
-        
-    else:
-        easygui.msgbox("Task ID not found!", title="Error")
+            # Remove the task_id from the list
+            tasks_assigned = \
+            [task.strip() for task in tasks_assigned if task.strip() != task_id]
+
+            # Convert the list back to a string
+            Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]\
+                ['Tasks Assigned'] = ', '.join(tasks_assigned)
+            
+            easygui.msgbox(f"Task {task_id} has been updated")
+            break
+            
+        else:
+            easygui.msgbox("Invalid task ID!", title="Error")
 
 def search_task():
     task_title = easygui.choicebox(msg="Choose a task to view:", \
             choices=list(Task_Dictionary))
+    
     if task_title:
         task_details = Task_Dictionary[task_title]
-        easygui.msgbox(msg=f"Title: {task_details['Title']}\nDescription: {task_details['Description']}\nAssignee: {task_details['Assignee']}\nPriority: {task_details['Priority']}\nStatus: {task_details['Status']}", title="Task Details")
+        
+        easygui.msgbox(msg=f"Title: {task_details['Title']}\
+        \nDescription: {task_details['Description']}\
+        \nAssignee: {task_details['Assignee']}\
+        \nPriority:{task_details['Priority']}\
+        \nStatus: {task_details['Status']}", \
+        title="Task Details")
+        
     else:
         easygui.msgbox("No task selected!", title="Error")
 
 def search_team_member():
-    team_member = easygui.choicebox(msg="Choose a team member to view:", choices=list(Team_Member_Dictionary))
+    team_member = easygui.choicebox(msg="Choose a team member to view:", \
+    choices=list(Team_Member_Dictionary))
+
     if team_member:
         member_details = Team_Member_Dictionary[team_member]
         task_list = (member_details['Tasks Assigned'])
-        easygui.msgbox(msg=f"Name: {member_details['Name']}\nEmail: {member_details['Email']}\nTasks Assigned: {task_list}",
-                       title="Team Member Details")
+        easygui.msgbox(msg=f"Name: {member_details['Name']}\
+        \nEmail: {member_details['Email']}\
+        \nTasks Assigned: {task_list}", \
+        title="Team Member Details")
+        
     else:
         easygui.msgbox("No team member selected!", title="Error")
 
@@ -148,13 +169,23 @@ def generate_report():
         elif task['Status'] == 'Not Started':
             not_started_tasks += 1
 
-    report_msg = f"Tasks Completed: {completed_tasks}\nTasks In Progress: {in_progress_tasks}\nTasks Blocked: {blocked_tasks}\nTasks Not Started: {not_started_tasks}"
+    report_msg = f"Tasks Completed: {completed_tasks}\
+        \nTasks In Progress: {in_progress_tasks}\
+        \nTasks Blocked: {blocked_tasks}\
+        \nTasks Not Started: {not_started_tasks}"
+    
     easygui.msgbox(msg=report_msg, title="Project Progress Report")
 
 def print_all():
     task_collection = ""
     for task_id, task_details in Task_Dictionary.items():
-        task_collection += f"Task ID: {task_id}\nTitle: {task_details['Title']}\nDescription: {task_details['Description']}\nAssignee: {task_details['Assignee']}\nPriority: {task_details['Priority']}\nStatus: {task_details['Status']}\n\n"
+        task_collection += f"Task ID: {task_id}\
+            \nTitle: {task_details['Title']}\
+            \nDescription: {task_details['Description']}\
+            \nAssignee: {task_details['Assignee']}\
+            \nPriority: {task_details['Priority']}\
+            \nStatus: {task_details['Status']}\n\n"
+        
     easygui.msgbox(task_collection, title="Task Collection")
 
 # Main menu options
