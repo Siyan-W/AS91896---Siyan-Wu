@@ -202,7 +202,7 @@ def print_all():
         
     easygui.msgbox(task_collection, title="Task Collection")
 
-# Main menu options
+# Main menu options.
 options = [
     "Add Task",
     "Update Task",
