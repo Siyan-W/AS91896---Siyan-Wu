@@ -1,6 +1,6 @@
 import easygui
 
-# Task Dictionary containing details of tasks.
+# Task Dictionary containing details of tasks
 Task_Dictionary = {
     'T1': {
         'Title': 'Design Homepage',
@@ -43,7 +43,7 @@ Task_Dictionary = {
     }
 }
 
-# Team Member Dictionary containing details of members.
+# Team Member Dictionary containing details of members
 Team_Member_Dictionary = {
     'JSM': {
         'Name': "John Smith",
@@ -67,10 +67,10 @@ Team_Member_Dictionary = {
 # Function to add a new task
 def add_task():
     while True:
-        # Generate sequential task ID.
+        # Generate sequential task ID
         new_task_id = 'T' + str(len(Task_Dictionary) + 1)
 
-        # Input task details.
+        # Input task details
         title = easygui.enterbox(msg="Enter task title:")
         if title == None:
             break
@@ -89,7 +89,7 @@ def add_task():
         if status == None:
             break
 
-        # Add task to dictionaries.
+        # Add the task to dictionaries
         Task_Dictionary[new_task_id] = {
             'Title': title,
             'Description': description,
@@ -111,24 +111,24 @@ def update_task():
             break
 
         if task_id in Task_Dictionary:
-            # Update task status.
+            # Update task status by letting user choose
             status = easygui.choicebox(msg="Set task status:", \
                 choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
             
             Task_Dictionary[task_id]['Status'] = status
 
-            # Assign task to team member if not "Completed".
+            # Assign task to team member if not "Completed"
             if status != "Completed":
                 assignee = easygui.choicebox(msg="Assign task to:", \
                         choices=list(Team_Member_Dictionary))
                 Task_Dictionary[task_id]['Assignee'] = assignee
 
-                # Remove task from team member's task list if completed.
+                # Remove task from team member's task list if completed
                 tasks_assigned = Team_Member_Dictionary\
                 [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned']\
                 .split(',')
 
-                # Remove the task_id from the list.
+                # Remove the task_id from the list
                 tasks_assigned = \
                 [task.strip() for task in tasks_assigned if task.strip() \
                 !=task_id]
@@ -179,6 +179,7 @@ def search_team_member():
     else:
         easygui.msgbox("No team member selected!", title="Error")
 
+# Function to generate report of all the tasks
 def generate_report():
     completed_tasks = in_progress_tasks = blocked_tasks = not_started_tasks = 0
     for task in Task_Dictionary.values():
@@ -198,6 +199,7 @@ def generate_report():
     
     easygui.msgbox(msg=report_msg, title="Project Progress Report")
 
+# Function to print out all the tasks and details
 def print_all():
     task_collection = ""
     for task_id, task_details in Task_Dictionary.items():
@@ -210,7 +212,7 @@ def print_all():
         
     easygui.msgbox(task_collection, title="Task Collection")
 
-# Main menu options.
+# Main menu options
 options = [
     "Add Task",
     "Update Task",
