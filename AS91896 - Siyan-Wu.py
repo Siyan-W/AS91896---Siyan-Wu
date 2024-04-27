@@ -115,23 +115,28 @@ def update_task():
             
             Task_Dictionary[task_id]['Status'] = status
 
-            # Assign task to a new team member.
-            assignee = easygui.choicebox(msg="Assign task to:", \
-                    choices=list(Team_Member_Dictionary))
-            Task_Dictionary[task_id]['Assignee'] = assignee
+            # Assign task to team member if not "Completed".
+            if status != "Completed":
+                assignee = easygui.choicebox(msg="Assign task to:", \
+                        choices=list(Team_Member_Dictionary))
+                Task_Dictionary[task_id]['Assignee'] = assignee
 
-            # Remove task from team member's task list if completed.
-            tasks_assigned = Team_Member_Dictionary\
-            [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
+                # Remove task from team member's task list if completed.
+                tasks_assigned = Team_Member_Dictionary\
+                [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned']\
+                .split(',')
 
-            # Remove the task_id from the list.
-            tasks_assigned = \
-            [task.strip() for task in tasks_assigned if task.strip() !=task_id]
+                # Remove the task_id from the list.
+                tasks_assigned = \
+                [task.strip() for task in tasks_assigned if task.strip() \
+                !=task_id]
 
-            # Convert the list back to a string
-            Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]\
-                ['Tasks Assigned'] = ', '.join(tasks_assigned)
-            
+                # Convert the list back to a string
+                Team_Member_Dictionary[Task_Dictionary[task_id]['Assignee']]\
+                    ['Tasks Assigned'] = ', '.join(tasks_assigned)
+            else:
+                Task_Dictionary[task_id]['Assignee'] = "None"
+
             easygui.msgbox(f"Task {task_id} has been updated")
             break
             
