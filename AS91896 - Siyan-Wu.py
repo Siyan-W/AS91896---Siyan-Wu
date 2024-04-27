@@ -223,6 +223,7 @@ options = [
     "Exit"
 ]
 
+# Letting user select what they want to make change of
 while True:
     choice = easygui.buttonbox(msg="Choose an option:", choices=options)
 
