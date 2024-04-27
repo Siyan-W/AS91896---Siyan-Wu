@@ -64,6 +64,7 @@ Team_Member_Dictionary = {
     }
 }
 
+# Function to add a new task
 def add_task():
     while True:
         # Generate sequential task ID.
@@ -101,6 +102,7 @@ def add_task():
 
         break
 
+# Function to update an existing task
 def update_task():
     while True:
         task_id = easygui.enterbox(msg="Enter task ID to update:")
@@ -143,6 +145,7 @@ def update_task():
         else:
             easygui.msgbox("Invalid task ID!", title="Error")
 
+# Function to search for a task
 def search_task():
     task_title = easygui.choicebox(msg="Choose a task to view:", \
             choices=list(Task_Dictionary))
@@ -160,6 +163,7 @@ def search_task():
     else:
         easygui.msgbox("No task selected!", title="Error")
 
+# Function to search for a team member
 def search_team_member():
     team_member = easygui.choicebox(msg="Choose a team member to view:", \
     choices=list(Team_Member_Dictionary))
