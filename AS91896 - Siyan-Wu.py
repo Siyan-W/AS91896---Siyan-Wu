@@ -1,6 +1,6 @@
 import easygui
 
-# Task Dictionary containing details of tasks
+# Task Dictionary containing details of tasks.
 Task_Dictionary = {
     'T1': {
         'Title': 'Design Homepage',
@@ -43,7 +43,7 @@ Task_Dictionary = {
     }
 }
 
-# Team Member Dictionary containing details of members
+# Team Member Dictionary containing details of members.
 Team_Member_Dictionary = {
     'JSM': {
         'Name': "John Smith",
@@ -66,10 +66,10 @@ Team_Member_Dictionary = {
 
 def add_task():
     while True:
-        # Generate sequential task ID
+        # Generate sequential task ID.
         new_task_id = 'T' + str(len(Task_Dictionary) + 1)
 
-        # Input task details
+        # Input task details.
         title = easygui.enterbox(msg="Enter task title:")
         if title == None:
             break
@@ -88,7 +88,7 @@ def add_task():
         if status == None:
             break
 
-        # Add task to dictionaries
+        # Add task to dictionaries.
         Task_Dictionary[new_task_id] = {
             'Title': title,
             'Description': description,
@@ -109,23 +109,22 @@ def update_task():
             break
 
         if task_id in Task_Dictionary:
-            # Update task status
+            # Update task status.
             status = easygui.choicebox(msg="Set task status:", \
                 choices=['Not Started', 'In Progress', 'Blocked', 'Completed'])
             
             Task_Dictionary[task_id]['Status'] = status
 
-            # Assign task to a new team member
+            # Assign task to a new team member.
             assignee = easygui.choicebox(msg="Assign task to:", \
                     choices=list(Team_Member_Dictionary))
             Task_Dictionary[task_id]['Assignee'] = assignee
 
-            # Remove task from team member's task list if completed
-            # Convert the string to a list
+            # Remove task from team member's task list if completed.
             tasks_assigned = Team_Member_Dictionary\
             [Task_Dictionary[task_id]['Assignee']]['Tasks Assigned'].split(',')
 
-            # Remove the task_id from the list
+            # Remove the task_id from the list.
             tasks_assigned = \
             [task.strip() for task in tasks_assigned if task.strip() !=task_id]
 
