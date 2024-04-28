@@ -170,12 +170,21 @@ def search_team_member():
 
     if team_member:
         member_details = Team_Member_Dictionary[team_member]
-        task_list = (member_details['Tasks Assigned'])
+        task_list = member_details['Tasks Assigned'].split(', ')
+
+        # Remove completed tasks from the task list
+        tasks_assigned = [task for task in task_list \
+        if Task_Dictionary[task]['Status'] != 'Completed']
+
+        # Update the Tasks Assigned string
+        Team_Member_Dictionary[team_member]['Tasks Assigned'] = \
+        ', '.join(tasks_assigned)
+
         easygui.msgbox(msg=f"Name: {member_details['Name']}\
         \nEmail: {member_details['Email']}\
-        \nTasks Assigned: {task_list}", \
+        \nTasks Assigned: {', '.join(tasks_assigned)}", \
         title="Team Member Details")
-        
+
     else:
         easygui.msgbox("No team member selected!", title="Error")
 
